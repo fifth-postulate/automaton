@@ -1,0 +1,32 @@
+<svg width="300" height="200px">    
+  <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M 0 0 L 10 5 L 0 10 z"></path> 
+  </marker>
+  <g fill="white" stroke="black" transform="translate(30, 100)">
+    <g marker-mid="url(#arrow)">
+      <g stroke="red">
+        <path d="M 0 0 C 10 10 25 50 0 50 C -25 50 -10 10 0 0 Z"/>
+      	<path d="M 0 0 C 10 10 25 50 0 50 C -25 50 -10 10 0 0 Z" transform="translate(240,0)"/>
+      	<path d="M 120 0 L 180 0 L 240 0"/>
+      </g>
+      <g stroke="blue">
+      	<path d="M 0 0 L 60 0 L 120 0"/>
+      	<path d="M 240 0 C 230 -50 190 -50 180 -50 C 170 -50 130 -50 120 0"/>
+      </g>
+    </g>
+    <g transform="translate(0, 0)">
+      <circle cx="0" cy="0" r="20"></circle>
+      <text x="0" y="0" fill="black" stoke="none">a</text>
+    </g>
+    <g transform="translate(120, 0)">
+      <circle cx="0" cy="0" r="25"></circle>
+      <circle cx="0" cy="0" r="20"></circle>
+      <text x="0" y="0" fill="black" stoke="none">b</text>
+    </g>
+    <g transform="translate(240, 0)">
+      <circle cx="0" cy="0" r="25"></circle>
+      <circle cx="0" cy="0" r="20"></circle>
+      <text x="0" y="0" fill="black" stoke="none">c</text>
+    </g>
+  </g>
+<svg>
