@@ -22,7 +22,7 @@ An example of a regular language are the strings that consists of the characters
 
 We should be able to construct a finite automaton that accepts this language.
 
-![automaton that accepts a string of '0' and '1' that contains at least a single 1 and avoids two consecutive 1s]
+![automaton that accepts a string of '0' and '1' that contains at least a single 1 and avoids two consecutive 1s](http://fifth-postulate.nl/automaton/automaton.svg)
 
 The finite automaton above accepts our regular language. Red lines are 0-transitions and blue lines are 1-transitions. 
 
