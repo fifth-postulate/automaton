@@ -18,10 +18,11 @@ The infamous `automaton/8` has a sibling constraint `automaton/3`. We will first
 Now finite automaton and regular languages are closely related. In fact for every regular language there is a finite automaton that accepts it. Furthermore, the words that a finite automaton accepts are a regular language.
 
 ## Example
-An example of a regular language are the strings that consists of the characters 0 and 1, contain at least a single 1 and avoid two consecutive 1.
+An example of a regular language are the strings that consists of the characters 0 and 1, contain at least a single 1 and avoids two consecutive 1s.
 
 We should be able to construct a finite automaton that accepts this language.
 
+![automaton that accepts a string of '0' and '1' that contains at least a single 1 and avoids two consecutive 1s]
 
 The finite automaton above accepts our regular language. Red lines are 0-transitions and blue lines are 1-transitions. 
 
