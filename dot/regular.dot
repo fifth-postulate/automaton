@@ -1,18 +1,15 @@
 digraph Regular {
     /* Entities */
     a [label="a", shape="circle"]
-    b [label="b", shape="circle"]
-    c [label="c", shape="circle"]
+    b [label="b", shape="doublecircle"]
+    c [label="c", shape="doublecircle"]
     
     /* Relationships */
-    a -> a[label="0", tailport=n, headport=n] 
+    a -> a[label="0"] 
     a -> b[label="1"]
 
     b -> c[label="0"]
 
-    c -> c[label="0", tailport=n, headport=n]
+    c -> c[label="0"]
     c -> b[label="1"]
-
-    /* Ranks */
-    { rank=same; a, b, c; };
 }

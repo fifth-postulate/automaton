@@ -1,0 +1,10 @@
+digraph free {
+    /* Entities */
+    a [label="a", shape="doublecircle"]
+    b [label="b", shape="doublecircle"]
+    
+    /* Relationships */
+    a -> a[label="0/C+1"]
+    a -> b[label="1/C-1"]
+    b -> b[label="1/C-1"]
+}
