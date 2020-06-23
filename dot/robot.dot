@@ -1,0 +1,26 @@
+digraph robot {
+    /* Entities */
+    north [label="N", shape="doublecircle"]
+    east [label="E", shape="doublecircle"]
+    south [label="S", shape="doublecircle"]
+    west [label="W", shape="doublecircle"]
+       
+    /* Relationships */
+    north -> north[label="0/X,Y+1,Fuel-FuelCost"]
+    east -> east[label="0/X+1,Y,Fuel-FuelCost"]
+    south -> south[label="0/X,Y-1,Fuel-FuelCost"]
+    west -> west[label="0/X-1,Y,Fuel-FuelCost"]
+
+    north -> east[label="1/X,Y,Fuel-FuelCost"]
+    east -> south[label="-1/X,Y,Fuel-FuelCost"]
+    south -> west[label="-1/X,Y,Fuel-FuelCost"]
+    west -> north[label="-1/X,Y,Fuel-FuelCost"]
+
+    north -> west[label="-1/X,Y,Fuel-FuelCost"]
+    west -> south[label="-1/X,Y,Fuel-FuelCost"]
+    south -> east[label="-1/X,Y,Fuel-FuelCost"]
+    east -> north[label="-1/X,Y,Fuel-FuelCost"]
+
+    /* Ranks */
+    { rank=same; east; west; };
+}

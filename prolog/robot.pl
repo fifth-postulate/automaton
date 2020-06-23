@@ -1,9 +1,9 @@
 :- use_module(library(clpfd)).
 
-valid_instructions(Instructions, Heading, Start, [Xfinish, Yfinish], RemainingFuel) :-
-    commands(Instructions, Commands),
+valid_program(Program, Heading, Start, [Xfinish, Yfinish], RemainingFuel) :-
+    commands(Program, Commands),
     RemainingFuel #>= 0,
-    automaton(Instructions, instruction(_, FuelCost), Commands,
+    automaton(Program, instruction(_, FuelCost), Commands,
         [source(Heading), sink(north), sink(east), sink(south), sink(west)], 
         [arc(north, 0, north, [X, Y+1, Fuel-FuelCost]), arc(north, 1, east, [X, Y, Fuel-FuelCost]), arc(north, -1, west, [X, Y, Fuel-FuelCost]),
          arc(east, 0, east, [X+1, Y, Fuel-FuelCost]), arc(east, 1, south, [X, Y, Fuel-FuelCost]), arc(east, -1, north, [X, Y, Fuel-FuelCost]),

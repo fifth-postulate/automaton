@@ -1,7 +1,7 @@
 # automaton
 Exploration of `automaton/8` of the clpfd Prolog library
 
-## Contraint logic Programming over Finite Domains 
+# Contraint logic Programming over Finite Domains 
 There is a wonderful Prolog library [`clpfd`][clpfd]. It allows one to constrain variables in various ways.
 
 It has a intriguing constraint [`automaton/8`][automaton/8]. It came up in the excellent pathway [tutorial on clpfd][tutorial] with the following phrase:
@@ -117,6 +117,65 @@ Or ask about all the words of lenght 4 in our language.
 false.
 ```
 
+## And beyond
+To understand the first two arguments to `automaton/8`, we are going to imagine the following scenario.
+
+Our little robot explorer SRH-3 is hit by solar flares that knocked out her autonomous navigation module. We will need to guide her back to the lab so she can be repaired. SRH-3 has a limited supply of fuel left. Unfortunately the fuel is very volatile and we can not risk rolling her home with fuel remaining for fear of blowing up the lab.
+
+The navigation team is steadily outputting instructions for SRH-3, for which the fuel-prognosis team calculates fuel cost. Our team is responsible for accepting and rejecting various programs that adhere to all contraints. I.e. at the end of the program SRH-3 should be at the lab without any fuel.
+
+A program is a list of instructions. Each instruction is a complex term `instruction(Command, FuelCost)`. Each command is either `forward`, `right` or `left`. the fuel cost is an integer. SRH-3 is able to orient herself along the compass directions `north`, `east`, `south` and `west`. When SRH-3 moves forward she advances 1 unit, turning right and left change the heading as one would expect.
+
+Our plan for our automaton have nodes for each heading SRH-3 can have. I.e a node `N` for north, a node `E` for east, `S` for south and `W` for west. Because our automaton can only transition on integers we pick a convention: `forward` is mapped to 0, `right` is mapped to 1, `left` is mapped to -1.
+
+```prolog
+command(instruction(forward, _), 0).
+command(instruction(right, _), 1).
+command(instruction(left, _), -1).
+```
+
+We can now explain the first argument of `automaton/8`. This is the called the _sequence_ and in our example is the program, i.e. the list of instructions. But the `clpfd` library likes to work with integers so we need to related the first argument, the sequence, with the third argument, the _signature_. It is the signature that our automaton will operate on. Let's write a clause that relates the sequence of our example to the signature.
+
+```prolog
+commands([], []).
+commands([Instruction|Instructions], [Command|Commands]) :-
+    command(Instruction, Command),
+    commands(Instructions, Commands).
+```
+
+This makes use of the command convention we introduced earlier.
+
+![An automaton that accepts valid programs](http://fifth-postulate.nl/automaton/robot.svg)
+
+Take a look at the automaton above. For each node there are three edges, one for each command. Depending on which command is given, we have to update the `X` and `Y` coordinates of SRH-3 and adjust the remaining `Fuel`. But how do we know the `FuelCost`.
+
+This is where the second argument of `automaton/8` shines. It is called the _template_. The template allows one to unify additional variables from elements in the sequence. This way, when we are processing a single `instruction(_, FuelCost)` we gain access to `FuelCost`.
+
+To tie things together the [code][code:robot] below encodes the automaton that accepts valid programs.
+
+```prolog
+valid_program(Program, Heading, Start, [Xfinish, Yfinish]) :-
+    commands(Program, Commands),
+    automaton(Program, instruction(_, FuelCost), Commands,
+        [source(Heading), sink(north), sink(east), sink(south), sink(west)], 
+        [arc(north, 0, north, [X, Y+1, Fuel-FuelCost]), arc(north, 1, east, [X, Y, Fuel-FuelCost]), arc(north, -1, west, [X, Y, Fuel-FuelCost]),
+         arc(east, 0, east, [X+1, Y, Fuel-FuelCost]), arc(east, 1, south, [X, Y, Fuel-FuelCost]), arc(east, -1, north, [X, Y, Fuel-FuelCost]),
+         arc(south, 0, south, [X, Y-1, Fuel-FuelCost]), arc(south, 1, west, [X, Y, Fuel-FuelCost]), arc(south, -1, east, [X, Y, Fuel-FuelCost]),
+         arc(west, 0, west, [X-1, Y, Fuel-FuelCost]), arc(west, 1, north, [X, Y, Fuel-FuelCost]), arc(west, -1, south, [X, Y, Fuel-FuelCost])],
+        [X, Y, Fuel], Start, [Xfinish, Yfinish, 0]).
+```
+
+`Program` is a list of `instruction(Command, FuelCost)`, `Heading` is one of the compass directions, `Start` is a list `[X, Y, RemainingFuel]` that describes the `X`-coordinate, `Y`-coordinate and the `RemainginFuel` of SRH-3. The last argument is the location of the lab that SRH-3 needs to go to.
+
+With the above program we can guide SRH-3 safely to the lab.
+
+```plain
+?- initial_condition(Program, Heading, Start, Finish), valid_program(Program, Heading, Start, Finish).
+Program = [instruction(forward, 2), instruction(right, 1), instruction(forward, 1), instruction(forward, 1)],
+Heading = north,
+Start = [0, 0, 5],
+Finish = [2, 1].
+```
 
 [clpfd]: https://www.swi-prolog.org/pldoc/man?section=clpfd
 [automaton/8]: https://www.swi-prolog.org/pldoc/doc_for?object=automaton/8
@@ -124,3 +183,4 @@ false.
 [tutorial]: http://pathwayslms.com/swipltuts/clpfd/clpfd.html
 [code:regular]: https://github.com/fifth-postulate/automaton/blob/master/prolog/regular.pl
 [code:free]: https://github.com/fifth-postulate/automaton/blob/master/prolog/anbn.pl
+[code:robot]: https://github.com/fifth-postulate/automaton/blob/master/prolog/robot.pl
