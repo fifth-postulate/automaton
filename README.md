@@ -97,7 +97,7 @@ The second `Word` argument, the sources and sinks are familiar. They play the sa
 
 The next argument looks familiar. It describes the edges in our automaton. But for `automaton/8` you are allowed to have a fourth argument to arc. This argument will be used to update a list of counters.
 
-Variable in that list refer to terms defined in the next argument of `automaton/8`. In our case we have only one counter `[C]`.
+Variable in that list refer to terms defined in the next argument of `automaton/8`. In our case we have only one counter `[C]`. The last two arguments determine the starting value and the final allowed value. In our case, `C` needs to start at `0` and and when every one is matched up with an zero it `C` should be `0`again.
 
 
 [clpfd]: https://www.swi-prolog.org/pldoc/man?section=clpfd
